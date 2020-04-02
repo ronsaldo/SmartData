@@ -1,5 +1,5 @@
 Class {
-	#name : #SMDHospitalService,
+	#name : #SMDHospital,
 	#superclass : #SMDRoleEntity,
 	#category : #'SmartData-MedicalRecord-Entities'
 }

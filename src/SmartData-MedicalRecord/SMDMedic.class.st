@@ -1,5 +1,5 @@
 Class {
-	#name : #SMDPatient,
+	#name : #SMDMedic,
 	#superclass : #SMDIndividual,
 	#category : #'SmartData-MedicalRecord-Entities'
 }
