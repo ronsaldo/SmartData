@@ -12,7 +12,7 @@ BaselineOfSmartData >> baseline: spec [
 		spec
 			package: #'SmartData-Core'.
 		spec
-			package: #'SmartData-Tests' with: [
+			package: #'SmartData-MedicalRecord' with: [
 				spec requires: #(#'SmartData-Core')
 			].
 	].
