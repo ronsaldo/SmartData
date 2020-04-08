@@ -84,7 +84,9 @@ SMDMedicalRecordTestScenarios >> testPatientCreation [
 		self assert: (patient surnames currentValueComesFrom: service1).
 
 		"Change the name, but do not commit it so the transaction is rolled back."		
-		patient names: 'Mary'
+		patient names: 'Mary'.
+		self assert: patient names value equals: 'Mary'.
+		self assert: (patient names currentValueComesFrom: service2).
 	].
 
 	dataStore withRole: service2 doTransactionWith: [ :transaction |

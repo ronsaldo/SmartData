@@ -2,10 +2,10 @@ Class {
 	#name : #SMDIndividual,
 	#superclass : #SMDRoleEntity,
 	#instVars : [
-		'names',
-		'surnames',
-		'birthDate',
-		'address'
+		'#names => SMDAtomicValueSlot',
+		'#surnames => SMDAtomicValueSlot',
+		'#birthDate => SMDAtomicValueSlot',
+		'#address => SMDAtomicValueSlot'
 	],
 	#category : #'SmartData-MedicalRecord-Entities'
 }
@@ -16,9 +16,8 @@ SMDIndividual >> address [
 ]
 
 { #category : #accessing }
-SMDIndividual >> address: newValues [
-	address value: newValues.
-	^ address
+SMDIndividual >> address: newValue [
+	address := newValue
 ]
 
 { #category : #accessing }
@@ -28,17 +27,12 @@ SMDIndividual >> birthDate [
 
 { #category : #accessing }
 SMDIndividual >> birthDate: newValue [
-	birthDate value: newValue.
-	^ birthDate
+	birthDate := newValue
 ]
 
 { #category : #initialization }
 SMDIndividual >> initialize [
 	super initialize.
-	names := SMDAtomicValueHolder new.
-	surnames := SMDAtomicValueHolder new.
-	address := SMDAtomicValueHolder new.
-	birthDate := SMDAtomicValueHolder new.
 ]
 
 { #category : #accessing }
@@ -48,8 +42,7 @@ SMDIndividual >> names [
 
 { #category : #accessing }
 SMDIndividual >> names: newValue [
-	names value: newValue.
-	^ names
+	names := newValue
 ]
 
 { #category : #accessing }
@@ -59,6 +52,5 @@ SMDIndividual >> surnames [
 
 { #category : #accessing }
 SMDIndividual >> surnames: newValue [
-	surnames value: newValue.
-	^ surnames
+	surnames := newValue
 ]

@@ -4,8 +4,8 @@ I represent an abstract entity that lives in a data store. Entities have a globa
 Class {
 	#name : #SMDEntity,
 	#superclass : #Object,
-	#traits : 'TSMDObjectWithOriginator',
-	#classTraits : 'TSMDObjectWithOriginator classTrait',
+	#traits : 'TSMDObjectWithOriginator + TSMDObjectWithHistory',
+	#classTraits : 'TSMDObjectWithOriginator classTrait + TSMDObjectWithHistory classTrait',
 	#instVars : [
 		'id'
 	],
@@ -21,6 +21,16 @@ SMDEntity class >> createWithID: anID [
 	].
 
 	^ context createEntity: self withId: anID
+]
+
+{ #category : #'as yet unclassified' }
+SMDEntity class >> entityFieldNames [
+	^ self entityFieldSlots collect: [ :each | each name ]
+]
+
+{ #category : #'as yet unclassified' }
+SMDEntity class >> entityFieldSlots [
+	^ self allSlots select: [ :each | each isSMDAbstractValueSlot ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -45,13 +55,34 @@ SMDEntity class >> getWithID: anID [
 	^ context getEntity: self withID: anID
 ]
 
+{ #category : #'as yet unclassified' }
+SMDEntity class >> serializeEntityObjectFields: anObject [
+	^ Array streamContents: [ :out |
+		self entityFieldSlots do: [ :eachSlot |
+			out nextPut: eachSlot name; nextPut: (eachSlot read: anObject) serializedField
+		]
+	]
+]
+
 { #category : #accessing }
 SMDEntity >> id [
 	^ id
+]
+
+{ #category : #initialization }
+SMDEntity >> initialize [
+	
+	self class initializeSlots: self.
+	super initialize.
 ]
 
 { #category : #accessing }
 SMDEntity >> initializeWithId: theId [
 	id := theId.
 	self initialize.
+]
+
+{ #category : #'as yet unclassified' }
+SMDEntity >> serializedEntityFields [
+	^ self class serializeEntityObjectFields: self
 ]

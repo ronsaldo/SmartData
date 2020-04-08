@@ -1,21 +1,15 @@
 Class {
 	#name : #SMDAtomicValueHolder,
-	#superclass : #Object,
-	#traits : 'TSMDObjectWithOriginator',
-	#classTraits : 'TSMDObjectWithOriginator classTrait',
-	#instVars : [
-		'value'
-	],
+	#superclass : #SMDAbstractValueHolder,
 	#category : #'SmartData-Core-Model'
 }
 
-{ #category : #evaluating }
-SMDAtomicValueHolder >> value [
-	^ value
+{ #category : #'instance creation' }
+SMDAtomicValueHolder class >> for: anOwner [
+	^ self new owner: anOwner; yourself
 ]
 
-{ #category : #accessing }
-SMDAtomicValueHolder >> value: newValue [
-	value := newValue.
-	self setCurrentContextOriginatorRole.
+{ #category : #'as yet unclassified' }
+SMDAtomicValueHolder >> serializedField [
+	^ value
 ]
