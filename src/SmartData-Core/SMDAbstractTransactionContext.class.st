@@ -66,6 +66,11 @@ SMDAbstractTransactionContext >> finishTransactionWritingChanges [
 ]
 
 { #category : #'as yet unclassified' }
+SMDAbstractTransactionContext >> generateAutomaticIDForClass: aClass [
+	^ dataStore generateAutomaticIDForClass: aClass
+]
+
+{ #category : #'as yet unclassified' }
 SMDAbstractTransactionContext >> getEntity: entityClass withID: anID [
 	self subclassResponsibility
 ]

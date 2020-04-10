@@ -56,6 +56,17 @@ SMDEntity class >> getWithID: anID [
 ]
 
 { #category : #'as yet unclassified' }
+SMDEntity class >> new [
+	| context |
+	context := SMDCurrentTransactionContext value.
+	context ifNil: [
+		self error: 'SMDEntity class >> #new can only be called inside the context of a transaction.'
+	].
+
+	^ self createWithID: (context generateAutomaticIDForClass: self)
+]
+
+{ #category : #'as yet unclassified' }
 SMDEntity class >> serializeEntityObjectFields: anObject [
 	^ Array streamContents: [ :out |
 		self entityFieldSlots do: [ :eachSlot |

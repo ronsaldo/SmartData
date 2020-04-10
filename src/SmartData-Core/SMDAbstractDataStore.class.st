@@ -13,6 +13,11 @@ SMDAbstractDataStore >> createTransactionContextWithConcreteRole: concreteRole [
 ]
 
 { #category : #'as yet unclassified' }
+SMDAbstractDataStore >> generateAutomaticIDForClass: aClass [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
 SMDAbstractDataStore >> withRole: role doTransactionWith: aBlock [
 	| transactionContext |
 	transactionContext := self createTransactionContextWithConcreteRole: role asConcreteRole.
