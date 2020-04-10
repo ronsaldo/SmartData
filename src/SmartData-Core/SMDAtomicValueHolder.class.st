@@ -10,6 +10,12 @@ SMDAtomicValueHolder class >> for: anOwner [
 ]
 
 { #category : #'as yet unclassified' }
+SMDAtomicValueHolder >> deserializeFieldFrom: rawDeserializedValue [
+	originatorConcreteRole := SMDConcreteRole materializeWith: rawDeserializedValue first.
+	value := rawDeserializedValue second.
+]
+
+{ #category : #'as yet unclassified' }
 SMDAtomicValueHolder >> serializedField [
-	^ value
+	^ {self originatorConcreteRole serialized . value}
 ]

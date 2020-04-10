@@ -32,7 +32,7 @@ SMDTransientDataStore >> generateAutomaticIDForClass: aClass [
 
 { #category : #'as yet unclassified' }
 SMDTransientDataStore >> getEntityWithID: entityID ifAbsent: aBlock [
-	^ storedEntities at: entityID ifAbsent: aBlock
+	^ storedEntities at: entityID ifPresent: [:existent | SMDEntity materializeEntityWith: existent] ifAbsent: aBlock
 ]
 
 { #category : #initialization }
@@ -45,5 +45,5 @@ SMDTransientDataStore >> initialize [
 
 { #category : #'as yet unclassified' }
 SMDTransientDataStore >> storeModifiedEntity: anEntity [
-	storedEntities at: anEntity id put: anEntity
+	storedEntities at: anEntity fullId put: anEntity serializedEntity
 ]

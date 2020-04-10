@@ -10,6 +10,11 @@ Class {
 	#category : #'SmartData-Core-Model'
 }
 
+{ #category : #'as yet unclassified' }
+SMDAbstractValueHolder >> deserializeFieldFrom: rawDeserializedValue [
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 SMDAbstractValueHolder >> owner [
 	^ owner
@@ -18,6 +23,11 @@ SMDAbstractValueHolder >> owner [
 { #category : #accessing }
 SMDAbstractValueHolder >> owner: anOwner [
 	owner := anOwner
+]
+
+{ #category : #'as yet unclassified' }
+SMDAbstractValueHolder >> serializedField [
+	self subclassResponsibility
 ]
 
 { #category : #evaluating }

@@ -15,7 +15,7 @@ SMDMedicalRecordTestScenarios >> getOrCreateHospital: hospitalName [
 
 { #category : #'as yet unclassified' }
 SMDMedicalRecordTestScenarios >> getOrCreateHospital: hospital service: serviceName [
-	^ dataStore withRole: SMDSuperUserAdminRole getOrCreateRole: SMDHospitalService withID: {hospital . serviceName}
+	^ dataStore withRole: SMDSuperUserAdminRole getOrCreateRole: SMDHospitalService withID: {hospital fullId . serviceName}
 ]
 
 { #category : #running }
@@ -30,6 +30,7 @@ SMDMedicalRecordTestScenarios >> testPatientBloodExam [
 	2.- Blood samples need to be placed into specific tubes that are coated with particular drugs that are required for the different blood exams
 	3.- The lab conducts the different experiments in the samples and writes different reports.
 	"
+	self assert: false.
 ]
 
 { #category : #tests }
@@ -43,6 +44,7 @@ SMDMedicalRecordTestScenarios >> testPatientCheckingInTheReception [
 	6.- The patient is given a receipt and notified to wait a call to go into the medic box.
 	7.- The medic is notified about its next patient.
 	"
+	self assert: false.
 ]
 
 { #category : #tests }

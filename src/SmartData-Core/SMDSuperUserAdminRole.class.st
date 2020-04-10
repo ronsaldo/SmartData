@@ -17,6 +17,11 @@ SMDSuperUserAdminRole class >> new [
 	self error: 'You cannot directly create an instance from ew'
 ]
 
+{ #category : #'as yet unclassified' }
+SMDSuperUserAdminRole class >> roleTypeName [
+	^ #SuperUserAdmin
+]
+
 { #category : #accessing }
 SMDSuperUserAdminRole class >> uniqueInstance [
 	^ uniqueInstance ifNil: [ self basicNew initialize
@@ -24,4 +29,14 @@ SMDSuperUserAdminRole class >> uniqueInstance [
 			yourself
 	]
 	
+]
+
+{ #category : #'as yet unclassified' }
+SMDSuperUserAdminRole >> deserializeFrom: aRoleTuple [
+	"Nothing is required here"
+]
+
+{ #category : #'as yet unclassified' }
+SMDSuperUserAdminRole >> serialized [
+	^ { self roleTypeName }
 ]

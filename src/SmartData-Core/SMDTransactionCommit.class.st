@@ -6,3 +6,8 @@ Class {
 	#superclass : #SMDTransactionException,
 	#category : #'SmartData-Core-Transaction'
 }
+
+{ #category : #testing }
+SMDTransactionCommit >> isTransactionCommitSignal [
+	^ true
+]

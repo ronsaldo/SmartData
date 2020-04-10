@@ -34,9 +34,9 @@ SMDTransientDataStoreTransactionContext >> finishTransactionWritingChanges [
 
 { #category : #'as yet unclassified' }
 SMDTransientDataStoreTransactionContext >> getEntity: entityClass withID: anID [
-	^ loadedEntitiesDictionary at: { entityClass . anID} ifAbsentPut: [
-		dataStore getEntityWithID: { entityClass . anID} ifAbsent: [
-			self abort: 'Failed to find a required entity in the database.'
+	^ loadedEntitiesDictionary at: { entityClass entityTypeName . anID} ifAbsentPut: [
+		dataStore getEntityWithID: { entityClass entityTypeName . anID} ifAbsent: [
+			self error: 'Failed to find a required entity in the database.'
 		]
 	]
 ]
