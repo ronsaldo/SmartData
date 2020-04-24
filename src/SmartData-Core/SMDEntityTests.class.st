@@ -74,6 +74,63 @@ SMDEntityTests >> testEntityNewNotInTransactionError [
 ]
 
 { #category : #tests }
+SMDEntityTests >> testEntityPreviousVersionAccess [
+	| id |
+	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
+		| entity |
+		entity := SMDTestEntityWithAttributes new.
+		entity name: 'Version'; value: 0.
+		self assert: entity previousVersion equals: nil.
+		self assert: entity firstVersion equals: entity.
+		self assert: entity currentVersion equals: entity.
+		
+		id := entity id.
+		transaction commit.
+	].
+
+	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
+		| entity |
+		entity := SMDTestEntityWithAttributes getWithID: id.
+		self assert: entity name value equals: 'Version'. 
+		self assert: entity value value equals: 0. 
+
+		self assert: entity previousVersion equals: nil.
+		self assert: entity firstVersion equals: entity.
+		self assert: entity currentVersion equals: entity.
+
+		entity value: 1.
+		transaction commit.
+	].
+
+	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
+		| entity |
+		entity := SMDTestEntityWithAttributes getWithID: id.
+		self assert: entity firstVersion name value equals: 'Version'.
+		self assert: entity firstVersion value value equals: 0.
+
+		self assert: entity previousVersion equals: entity firstVersion.
+
+		self assert: entity name value equals: 'Version'. 
+		self assert: entity value value equals: 1. 
+		entity value: 2.
+		transaction commit.
+	].
+
+	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
+		| entity |
+		entity := SMDTestEntityWithAttributes getWithID: id.
+		self assert: entity firstVersion name value equals: 'Version'.
+		self assert: entity firstVersion value value equals: 0.
+
+		self assert: entity previousVersion name value equals: 'Version'.
+		self assert: entity previousVersion value value equals: 1.
+
+		self assert: entity name value equals: 'Version'. 
+		self assert: entity value value equals: 2.
+	].
+]
+
+{ #category : #tests }
 SMDEntityTests >> testEntitySerialization [
 	| originalId serializedEntity |
 	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |

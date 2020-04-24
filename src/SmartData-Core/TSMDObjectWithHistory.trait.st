@@ -1,7 +1,10 @@
 Trait {
 	#name : #TSMDObjectWithHistory,
 	#instVars : [
-		'versionReference'
+		'firstVersionReference',
+		'previousVersionReference',
+		'versionReference',
+		'currentVersionReference'
 	],
 	#category : #'SmartData-Core-Model'
 }
