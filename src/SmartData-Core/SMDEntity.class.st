@@ -7,7 +7,8 @@ Class {
 	#traits : 'TSMDObjectWithOriginator + TSMDObjectWithHistory',
 	#classTraits : 'TSMDObjectWithOriginator classTrait + TSMDObjectWithHistory classTrait',
 	#instVars : [
-		'id'
+		'id',
+		'isModifiedInCurrentTransaction'
 	],
 	#category : #'SmartData-Core-Model'
 }
@@ -80,6 +81,19 @@ SMDEntity class >> getWithFullID: aFullID [
 ]
 
 { #category : #'as yet unclassified' }
+SMDEntity class >> getWithFullID: aFullID versionID: aVersionID [
+	| entityClass context |
+	entityClass := self entityClassFromTypeName: aFullID first.
+
+	context := SMDCurrentTransactionContext value.
+	context ifNil: [
+		self error: 'SMDEntity class >> #getWithFullID:versionID: can only be called inside the context of a transaction.'
+	].
+	
+	^ entityClass getWithID: aFullID second versionID: aVersionID
+]
+
+{ #category : #'as yet unclassified' }
 SMDEntity class >> getWithID: anID [
 	| context |
 	context := SMDCurrentTransactionContext value.
@@ -91,7 +105,18 @@ SMDEntity class >> getWithID: anID [
 ]
 
 { #category : #'as yet unclassified' }
-SMDEntity class >> materializeEntityWith: serializedEntity [
+SMDEntity class >> getWithID: anID versionID: aVersionID [
+	| context |
+	context := SMDCurrentTransactionContext value.
+	context ifNil: [
+		self error: 'SMDEntity class >> #getWithID: can only be called inside the context of a transaction.'
+	].
+
+	^ context getEntity: self withID: anID versionID: aVersionID
+]
+
+{ #category : #'as yet unclassified' }
+SMDEntity class >> materializeEntityVersionId: versionId with: serializedEntity [
 	| serializedEntityDictionary id type entityClass entity |
 	serializedEntityDictionary := Dictionary newFromPairs: serializedEntity.
 	id := serializedEntityDictionary at: #id.
@@ -99,6 +124,7 @@ SMDEntity class >> materializeEntityWith: serializedEntity [
 	entityClass := self entityClassFromTypeName: type.
 	
 	entity := entityClass basicNew initializeWithId: id.
+	entity currentVersionReferenceId: versionId. 
 	entity deserializeExtraMetaDataFrom: serializedEntityDictionary.
 	entity deserializeEntityFieldsFrom: (Dictionary newFromPairs: (serializedEntityDictionary at: #fields)).
 	^ entity
@@ -125,18 +151,33 @@ SMDEntity class >> serializeEntityObjectFields: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+SMDEntity >> contentModified [
+	isModifiedInCurrentTransaction ifTrue: [ ^ self ].
+	isModifiedInCurrentTransaction := true.
+	SMDCurrentTransactionContext value addModifiedObject: self.
+	self setCurrentContextOriginatorRole.
+	self ensureCurrentVersionIsSelfReference.
+]
+
+{ #category : #'as yet unclassified' }
 SMDEntity >> deserializeEntityFieldsFrom: aDictionary [
 	^ self class deserializeEntityObject: self fieldsFrom: aDictionary
 ]
 
 { #category : #'as yet unclassified' }
 SMDEntity >> deserializeExtraMetaDataFrom: metadataDictionary [
-	originatorConcreteRole := SMDConcreteRole materializeWith: (metadataDictionary at: #originatorConcreteRole)
+	originatorConcreteRole := SMDConcreteRole materializeWith: (metadataDictionary at: #originatorConcreteRole).
+	self deserializeHistoryFieldsFrom: metadataDictionary
 ]
 
 { #category : #accessing }
 SMDEntity >> fullId [
 	^ {self class entityTypeName . id}
+]
+
+{ #category : #accessing }
+SMDEntity >> fullVersionId [
+	^ self currentVersionReference fullId
 ]
 
 { #category : #accessing }
@@ -148,6 +189,8 @@ SMDEntity >> id [
 SMDEntity >> initialize [
 	
 	self class initializeSlots: self.
+	self initializeObjectHistory.
+	isModifiedInCurrentTransaction := false.
 	super initialize.
 ]
 
@@ -162,6 +205,7 @@ SMDEntity >> serializedEntity [
 	^ {#id . id .
 		#type . self class entityTypeName.
 		#originatorConcreteRole . self originatorConcreteRole serialized.
+	} , self serializeHistoryFields , {
 		#fields . self serializedEntityFields. 
 	}
 ]

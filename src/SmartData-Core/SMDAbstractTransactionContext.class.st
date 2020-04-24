@@ -26,6 +26,11 @@ SMDAbstractTransactionContext >> abort: message [
 	^ SMDTransactionAbort signal: message
 ]
 
+{ #category : #adding }
+SMDAbstractTransactionContext >> addModifiedObject: anObject [
+	self subclassResponsibility
+]
+
 { #category : #actions }
 SMDAbstractTransactionContext >> commit [
 	^ SMDTransactionCommit signal
@@ -76,6 +81,11 @@ SMDAbstractTransactionContext >> getEntity: entityClass withID: anID [
 ]
 
 { #category : #'as yet unclassified' }
+SMDAbstractTransactionContext >> getEntity: entityClass withID: anID versionID: aVersionID [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
 SMDAbstractTransactionContext >> getOrCreateEntity: entityClass withID: anID [
 	self subclassResponsibility
 ]
@@ -110,4 +120,9 @@ SMDAbstractTransactionContext >> performWithBlock: aBlock [
 		self finishTransactionWithResult: transactionCommited.
 	]
 
+]
+
+{ #category : #'as yet unclassified' }
+SMDAbstractTransactionContext >> transactionVersionID [
+	^ self subclassResponsibility
 ]

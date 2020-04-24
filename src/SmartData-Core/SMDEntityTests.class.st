@@ -105,6 +105,8 @@ SMDEntityTests >> testEntityPreviousVersionAccess [
 	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
 		| entity |
 		entity := SMDTestEntityWithAttributes getWithID: id.
+		self assert: entity currentVersion equals: entity.
+		self assert: entity ~= entity firstVersion.
 		self assert: entity firstVersion name value equals: 'Version'.
 		self assert: entity firstVersion value value equals: 0.
 
@@ -119,6 +121,7 @@ SMDEntityTests >> testEntityPreviousVersionAccess [
 	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
 		| entity |
 		entity := SMDTestEntityWithAttributes getWithID: id.
+		self assert: entity currentVersion equals: entity.
 		self assert: entity firstVersion name value equals: 'Version'.
 		self assert: entity firstVersion value value equals: 0.
 
@@ -132,7 +135,7 @@ SMDEntityTests >> testEntityPreviousVersionAccess [
 
 { #category : #tests }
 SMDEntityTests >> testEntitySerialization [
-	| originalId serializedEntity |
+	| originalId serializedEntity versionId |
 	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
 		| entity |
 		entity := SMDTestEntityWithAttributes new.
@@ -140,11 +143,12 @@ SMDEntityTests >> testEntitySerialization [
 		originalId := entity id.
 		serializedEntity := entity serializedEntity.
 		self assert: serializedEntity isArray.
+		versionId := entity currentVersionReference id.
 	].
 
 	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
 		| deserializedEntity |
-		deserializedEntity := SMDEntity materializeEntityWith: serializedEntity.
+		deserializedEntity := SMDEntity materializeEntityVersionId: versionId with:  serializedEntity.
 		self assert: deserializedEntity id equals: originalId.
 		self assert: deserializedEntity name value equals: 'John Doe'.
 		self assert: deserializedEntity value value equals: 42.

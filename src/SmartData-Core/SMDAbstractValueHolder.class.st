@@ -39,4 +39,5 @@ SMDAbstractValueHolder >> value [
 SMDAbstractValueHolder >> value: newValue [
 	value := newValue.
 	self setCurrentContextOriginatorRole.
+	owner ifNotNil: [ owner contentModified ]
 ]

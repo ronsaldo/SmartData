@@ -5,9 +5,13 @@ Class {
 	#name : #SMDTransientDataStore,
 	#superclass : #SMDAbstractDataStore,
 	#instVars : [
-		'storedEntities',
 		'automaticIDCountMutex',
-		'automaticIDCount'
+		'automaticIDCount',
+		'storedEntityVersions',
+		'transactionCountMutex',
+		'transactionCount',
+		'storedEntityLastVersion',
+		'storedEntityFirstVersion'
 	],
 	#category : #'SmartData-Core-Store'
 }
@@ -17,6 +21,7 @@ SMDTransientDataStore >> createTransactionContextWithConcreteRole: concreteRole 
 	^ SMDTransientDataStoreTransactionContext new
 		dataStore: self;
 		originatorConcreteRole: concreteRole;
+		transactionVersionID: self newTransactionVersionID;
 		yourself
 ]
 
@@ -31,19 +36,54 @@ SMDTransientDataStore >> generateAutomaticIDForClass: aClass [
 ]
 
 { #category : #'as yet unclassified' }
+SMDTransientDataStore >> getEntityLastVersionForID: entityID [
+	^ storedEntityLastVersion at: entityID
+]
+
+{ #category : #'as yet unclassified' }
 SMDTransientDataStore >> getEntityWithID: entityID ifAbsent: aBlock [
-	^ storedEntities at: entityID ifPresent: [:existent | SMDEntity materializeEntityWith: existent] ifAbsent: aBlock
+	^ storedEntityLastVersion at: entityID ifPresent: [:existentVersionId |
+		self getEntityWithID: entityID versionID: existentVersionId second ifAbsent: aBlock
+	] ifAbsent: aBlock
+]
+
+{ #category : #'as yet unclassified' }
+SMDTransientDataStore >> getEntityWithID: entityID versionID: aVersionID ifAbsent: aBlock [
+	^ storedEntityVersions at: {entityID . aVersionID} ifPresent: [ :existent |
+		SMDEntity materializeEntityVersionId: aVersionID with: existent
+	] ifAbsent: aBlock
 ]
 
 { #category : #initialization }
 SMDTransientDataStore >> initialize [
 	super initialize.
-	storedEntities := Dictionary new.
+	storedEntityVersions := Dictionary new.
+	storedEntityFirstVersion := Dictionary new.
+	storedEntityLastVersion := Dictionary new.
 	automaticIDCountMutex := Semaphore forMutualExclusion.
 	automaticIDCount := 0.
+	transactionCountMutex := Semaphore forMutualExclusion.
+	transactionCount := 0.
+
+]
+
+{ #category : #'as yet unclassified' }
+SMDTransientDataStore >> newTransactionVersionID [
+	| result |
+	transactionCountMutex critical: [ 
+		result := transactionCount.
+		transactionCount := transactionCount + 1.
+	].
+	^ result
 ]
 
 { #category : #'as yet unclassified' }
 SMDTransientDataStore >> storeModifiedEntity: anEntity [
-	storedEntities at: anEntity fullId put: anEntity serializedEntity
+	| fullId fullVersionId versionId |
+	fullVersionId := anEntity fullVersionId.
+	fullId := fullVersionId first.
+	versionId := fullVersionId second.
+	storedEntityFirstVersion at: fullId ifAbsentPut: [versionId].
+	storedEntityLastVersion at: fullId put: versionId.
+	storedEntityVersions at: fullVersionId put: anEntity serializedEntity.
 ]
