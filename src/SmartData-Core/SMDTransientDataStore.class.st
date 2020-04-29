@@ -11,7 +11,8 @@ Class {
 		'transactionCountMutex',
 		'transactionCount',
 		'storedEntityLastVersion',
-		'storedEntityFirstVersion'
+		'storedEntityFirstVersion',
+		'storedEntityClasses'
 	],
 	#category : #'SmartData-Core-Store'
 }
@@ -23,6 +24,16 @@ SMDTransientDataStore >> createTransactionContextWithConcreteRole: concreteRole 
 		originatorConcreteRole: concreteRole;
 		transactionVersionID: self newTransactionVersionID;
 		yourself
+]
+
+{ #category : #initialization }
+SMDTransientDataStore >> entitiesPerClass: aClassName [
+	^ (storedEntityClasses at: aClassName ifAbsent: [ #() ]) copy
+]
+
+{ #category : #initialization }
+SMDTransientDataStore >> entityClasses [
+	^ storedEntityClasses keys
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,6 +68,7 @@ SMDTransientDataStore >> getEntityWithID: entityID versionID: aVersionID ifAbsen
 { #category : #initialization }
 SMDTransientDataStore >> initialize [
 	super initialize.
+	storedEntityClasses := Dictionary new.
 	storedEntityVersions := Dictionary new.
 	storedEntityFirstVersion := Dictionary new.
 	storedEntityLastVersion := Dictionary new.
@@ -83,6 +95,8 @@ SMDTransientDataStore >> storeModifiedEntity: anEntity [
 	fullVersionId := anEntity fullVersionId.
 	fullId := fullVersionId first.
 	versionId := fullVersionId second.
+	(storedEntityClasses at: fullId first ifAbsentPut: [ Set new ])
+		add: fullId.
 	storedEntityFirstVersion at: fullId ifAbsentPut: [versionId].
 	storedEntityLastVersion at: fullId put: versionId.
 	storedEntityVersions at: fullVersionId put: anEntity serializedEntity.

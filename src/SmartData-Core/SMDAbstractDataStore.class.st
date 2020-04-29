@@ -7,24 +7,47 @@ Class {
 	#category : #'SmartData-Core-Store'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #inspector }
 SMDAbstractDataStore >> createTransactionContextWithConcreteRole: concreteRole [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
+SMDAbstractDataStore >> entitiesPerClass: aClassName [
+	self subclassResponsibility
+]
+
+{ #category : #inspector }
+SMDAbstractDataStore >> entityClasses [
+	^ self subclassResponsibility
+]
+
+{ #category : #inspector }
 SMDAbstractDataStore >> generateAutomaticIDForClass: aClass [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #inspector }
+SMDAbstractDataStore >> gtInspectorEntitiesIn: composite [
+	<gtInspectorPresentationOrder: 10>
+	composite tree
+		title: 'Entities';
+		display: [ self entityClasses collect: [:eachClassName |
+				SMDEntityClassInspectorProxy new
+					dataStore: self;
+					entityClassName: eachClassName;
+					yourself ] ];
+		children: [ :each | each gtInspectorChildren ]
+]
+
+{ #category : #inspector }
 SMDAbstractDataStore >> withRole: role doTransactionWith: aBlock [
 	| transactionContext |
 	transactionContext := self createTransactionContextWithConcreteRole: role asConcreteRole.
 	^ transactionContext performWithBlock: aBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #inspector }
 SMDAbstractDataStore >> withRole: aRole getOrCreateRole: aRoleClass withID: anID [
 	| result |
 	result := nil.

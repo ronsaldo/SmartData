@@ -95,4 +95,5 @@ SMDMedicalRecordTestScenarios >> testPatientCreation [
 		patient := SMDPatient getWithID: 'N1234-k'.
 		self assert: patient names value equals: 'John'.
 	].
+	dataStore inspect.
 ]
