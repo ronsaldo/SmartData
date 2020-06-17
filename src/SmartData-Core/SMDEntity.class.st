@@ -130,6 +130,11 @@ SMDEntity class >> materializeEntityVersionId: versionId with: serializedEntity 
 	^ entity
 ]
 
+{ #category : #'instance creation' }
+SMDEntity class >> named: slotName [
+	^ (SMDEntityReferenceType for: self) named: slotName
+]
+
 { #category : #'as yet unclassified' }
 SMDEntity class >> new [
 	| context |

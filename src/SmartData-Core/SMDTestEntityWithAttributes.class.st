@@ -2,8 +2,8 @@ Class {
 	#name : #SMDTestEntityWithAttributes,
 	#superclass : #SMDEntity,
 	#instVars : [
-		'#name => SMDAtomicValueSlot',
-		'#value => SMDAtomicValueSlot'
+		'#name => SMDStringType',
+		'#value => SMDIntegerType'
 	],
 	#category : #'SmartData-Core-Tests'
 }
