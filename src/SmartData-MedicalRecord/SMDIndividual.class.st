@@ -2,10 +2,10 @@ Class {
 	#name : #SMDIndividual,
 	#superclass : #SMDRoleEntity,
 	#instVars : [
-		'#names => SMDAtomicValueSlot',
-		'#surnames => SMDAtomicValueSlot',
-		'#birthDate => SMDAtomicValueSlot',
-		'#address => SMDAtomicValueSlot'
+		'#names => SMDStringType',
+		'#surnames => SMDStringType',
+		'#birthDate => SMDStringType',
+		'#address => SMDStringType'
 	],
 	#category : #'SmartData-MedicalRecord-Entities'
 }
