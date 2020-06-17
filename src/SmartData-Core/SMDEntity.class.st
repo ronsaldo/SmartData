@@ -13,6 +13,11 @@ Class {
 	#category : #'SmartData-Core-Model'
 }
 
+{ #category : #'instance creation' }
+SMDEntity class >> asSMDType [
+	^ SMDEntityReferenceType for: self
+]
+
 { #category : #'as yet unclassified' }
 SMDEntity class >> createWithID: anID [
 	| context |
@@ -132,7 +137,7 @@ SMDEntity class >> materializeEntityVersionId: versionId with: serializedEntity 
 
 { #category : #'instance creation' }
 SMDEntity class >> named: slotName [
-	^ (SMDEntityReferenceType for: self) named: slotName
+	^ self asSMDType named: slotName
 ]
 
 { #category : #'as yet unclassified' }

@@ -17,6 +17,16 @@ SMDAbstractType >> deserializeValue: value in: valueHolder [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+SMDAbstractType >> memberSlots [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+SMDAbstractType >> name [
+	self subclassResponsibility
+]
+
 { #category : #'instance creation' }
 SMDAbstractType >> named: aSlotName [
 	^ (self slotClass named: aSlotName)
@@ -32,4 +42,9 @@ SMDAbstractType >> serializeValue: value in: valueHolder [
 { #category : #'as yet unclassified' }
 SMDAbstractType >> slotClass [
 	^ SMDValueSlot
+]
+
+{ #category : #accessing }
+SMDAbstractType >> supertype [
+	^ nil
 ]

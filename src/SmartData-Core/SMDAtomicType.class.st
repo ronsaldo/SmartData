@@ -30,6 +30,16 @@ SMDAtomicType >> deserializeValue: value in: valueHolder [
 	^ value
 ]
 
+{ #category : #'as yet unclassified' }
+SMDAtomicType >> memberSlots [
+	^ #()
+]
+
+{ #category : #accessing }
+SMDAtomicType >> name [
+	^ self class name
+]
+
 { #category : #printing }
 SMDAtomicType >> printOn: aStream [
 	aStream nextPutAll: self class name

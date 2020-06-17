@@ -3,3 +3,8 @@ Class {
 	#superclass : #SMDAtomicType,
 	#category : #'SmartData-Core-Model'
 }
+
+{ #category : #accessing }
+SMDStringType >> name [
+	^ #String
+]

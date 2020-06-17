@@ -1,5 +1,10 @@
 Class {
 	#name : #SMDIntegerType,
-	#superclass : #SMDAtomicType,
+	#superclass : #SMDNumberType,
 	#category : #'SmartData-Core-Model'
 }
+
+{ #category : #accessing }
+SMDIntegerType >> name [
+	^ #Integer
+]
