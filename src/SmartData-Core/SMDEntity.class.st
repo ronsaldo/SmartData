@@ -4,8 +4,8 @@ I represent an abstract entity that lives in a data store. Entities have a globa
 Class {
 	#name : #SMDEntity,
 	#superclass : #Object,
-	#traits : 'TSMDObjectWithOriginator + TSMDObjectWithHistory',
-	#classTraits : 'TSMDObjectWithOriginator classTrait + TSMDObjectWithHistory classTrait',
+	#traits : 'TSMDObjectWithOriginator + TSMDObjectWithHistory + TSMDBehaviorTypeMethods',
+	#classTraits : 'TSMDObjectWithOriginator classTrait + TSMDObjectWithHistory classTrait + TSMDBehaviorTypeMethods classTrait',
 	#instVars : [
 		'id',
 		'isModifiedInCurrentTransaction'

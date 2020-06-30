@@ -17,6 +17,16 @@ SMDAbstractType >> deserializeValue: value in: valueHolder [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'type composition' }
+SMDAbstractType >> list [
+	^ SMDListType for: self
+]
+
+{ #category : #'type composition' }
+SMDAbstractType >> listWithIndices: indexedSlotNames [
+	^ SMDListType for: self indices: indexedSlotNames
+]
+
 { #category : #'as yet unclassified' }
 SMDAbstractType >> memberSlots [
 	^ self subclassResponsibility
@@ -37,6 +47,16 @@ SMDAbstractType >> named: aSlotName [
 { #category : #serialization }
 SMDAbstractType >> serializeValue: value in: valueHolder [
 	^ self subclassResponsibility
+]
+
+{ #category : #'type composition' }
+SMDAbstractType >> set [
+	^ SMDSetType for: self
+]
+
+{ #category : #'type composition' }
+SMDAbstractType >> setWithIndices: indexedSlotNames [
+	^ SMDSetType for: self indices: indexedSlotNames
 ]
 
 { #category : #'as yet unclassified' }
