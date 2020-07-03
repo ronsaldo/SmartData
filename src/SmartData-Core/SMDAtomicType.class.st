@@ -26,8 +26,18 @@ SMDAtomicType class >> uniqueInstance [
 ]
 
 { #category : #serialization }
-SMDAtomicType >> deserializeValue: value [
+SMDAtomicType >> convertFromSerialized: value [
 	^ value
+]
+
+{ #category : #serialization }
+SMDAtomicType >> convertToSerialize: value [
+	^ value
+]
+
+{ #category : #serialization }
+SMDAtomicType >> deserializeValue: value [
+	^ value ifNotNil: [ self convertFromSerialized: value ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -47,5 +57,5 @@ SMDAtomicType >> printOn: aStream [
 
 { #category : #serialization }
 SMDAtomicType >> serializeValue: value [
-	^ value
+	^ value ifNotNil: [ self convertToSerialize: value ]
 ]

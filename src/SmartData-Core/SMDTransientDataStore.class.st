@@ -101,3 +101,16 @@ SMDTransientDataStore >> storeModifiedEntity: anEntity [
 	storedEntityLastVersion at: fullId put: versionId.
 	storedEntityVersions at: fullVersionId put: anEntity serializedEntity.
 ]
+
+{ #category : #'as yet unclassified' }
+SMDTransientDataStore >> storeModifiedEntity: anEntity serializedData: serializedEntity [
+	| fullId fullVersionId versionId |
+	fullVersionId := anEntity fullVersionId.
+	fullId := fullVersionId first.
+	versionId := fullVersionId second.
+	(storedEntityClasses at: fullId first ifAbsentPut: [ Set new ])
+		add: fullId.
+	storedEntityFirstVersion at: fullId ifAbsentPut: [versionId].
+	storedEntityLastVersion at: fullId put: versionId.
+	storedEntityVersions at: fullVersionId put: serializedEntity.
+]

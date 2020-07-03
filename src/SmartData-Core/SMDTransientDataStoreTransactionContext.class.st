@@ -37,9 +37,15 @@ SMDTransientDataStoreTransactionContext >> finishTransactionRollingBackChanges [
 
 { #category : #hooks }
 SMDTransientDataStoreTransactionContext >> finishTransactionWritingChanges [
-	objectModificationLog do: [ :each |
-		dataStore storeModifiedEntity: each
+	| serializedModifiedEntities |
+	serializedModifiedEntities := objectModificationLog collect: [ :each |
+		{each . each serializedEntity}
 	].
+
+	self assert: (serializedModifiedEntities allSatisfy: [ :each | each second isSMDDocumentSerializationData ]).
+	serializedModifiedEntities do: [ :each |
+		dataStore storeModifiedEntity: each first serializedData: each second
+	]
 ]
 
 { #category : #'as yet unclassified' }
