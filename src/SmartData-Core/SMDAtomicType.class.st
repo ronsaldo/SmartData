@@ -26,7 +26,7 @@ SMDAtomicType class >> uniqueInstance [
 ]
 
 { #category : #serialization }
-SMDAtomicType >> deserializeValue: value in: valueHolder [
+SMDAtomicType >> deserializeValue: value [
 	^ value
 ]
 
@@ -46,6 +46,6 @@ SMDAtomicType >> printOn: aStream [
 ]
 
 { #category : #serialization }
-SMDAtomicType >> serializeValue: value in: valueHolder [
+SMDAtomicType >> serializeValue: value [
 	^ value
 ]

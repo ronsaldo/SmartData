@@ -4,7 +4,7 @@ Class {
 	#traits : 'TSMDObjectWithOriginator',
 	#classTraits : 'TSMDObjectWithOriginator classTrait',
 	#instVars : [
-		'slot',
+		'type',
 		'owner',
 		'value'
 	],
@@ -12,8 +12,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-SMDValueHolder class >> for: anOwner withSlot: slot [
-	^ self new slot: slot; owner: anOwner; yourself
+SMDValueHolder class >> for: anOwner withType: type [
+	^ self new type: type; owner: anOwner; yourself
 ]
 
 { #category : #accessing }
@@ -21,10 +21,17 @@ SMDValueHolder >> adaptNewValue: newValue [
 	^ newValue
 ]
 
+{ #category : #accessing }
+SMDValueHolder >> contentModified [
+	self setCurrentContextOriginatorRole.
+	owner ifNotNil: [ owner contentModified ]
+]
+
 { #category : #'as yet unclassified' }
 SMDValueHolder >> deserializeFieldFrom: rawDeserializedValue [
 	originatorConcreteRole := SMDConcreteRole materializeWith: rawDeserializedValue first.
-	value := slot deserializeValue: rawDeserializedValue second in: self.
+	value := type deserializeValue: rawDeserializedValue second.
+	value smdOwnerHolder: self
 ]
 
 { #category : #accessing }
@@ -39,27 +46,26 @@ SMDValueHolder >> owner: anOwner [
 
 { #category : #'as yet unclassified' }
 SMDValueHolder >> serializedField [
-	^ {self originatorConcreteRole serialized . slot serializeValue: value in: self}
+	^ {self originatorConcreteRole serialized . type serializeValue: self value}
 ]
 
 { #category : #accessing }
-SMDValueHolder >> slot [
-	^ slot
+SMDValueHolder >> type [
+	^ type
 ]
 
 { #category : #accessing }
-SMDValueHolder >> slot: anObject [
-	slot := anObject
+SMDValueHolder >> type: aType [
+	type := aType
 ]
 
 { #category : #evaluating }
 SMDValueHolder >> value [
-	^ value
+	^ value ifNil: [ value := self type createInitialValueForValueHolder: self ]
 ]
 
 { #category : #accessing }
 SMDValueHolder >> value: newValue [
 	value := self adaptNewValue: newValue.
-	self setCurrentContextOriginatorRole.
-	owner ifNotNil: [ owner contentModified ]
+	self contentModified
 ]

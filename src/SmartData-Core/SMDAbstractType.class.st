@@ -12,8 +12,18 @@ SMDAbstractType >> asValueForSlotPrinting [
 	^ self
 ]
 
+{ #category : #'as yet unclassified' }
+SMDAbstractType >> createInitialValueForValueHolder: valueHolder [
+	^ nil
+]
+
+{ #category : #'as yet unclassified' }
+SMDAbstractType >> createValueHolderFor: anObject slot: aSlot [
+	^ SMDValueHolder for: anObject withType: self
+]
+
 { #category : #serialization }
-SMDAbstractType >> deserializeValue: value in: valueHolder [
+SMDAbstractType >> deserializeValue: value [
 	^ self subclassResponsibility
 ]
 
@@ -45,7 +55,7 @@ SMDAbstractType >> named: aSlotName [
 ]
 
 { #category : #serialization }
-SMDAbstractType >> serializeValue: value in: valueHolder [
+SMDAbstractType >> serializeValue: value [
 	^ self subclassResponsibility
 ]
 

@@ -4,6 +4,11 @@ Class {
 	#category : #'SmartData-Core-Model'
 }
 
+{ #category : #serialization }
+SMDEntityReferenceType >> deserializeValue: value [
+	^ SMDEntity getWithFullVersionID: value
+]
+
 { #category : #'as yet unclassified' }
 SMDEntityReferenceType >> memberSlots [
 	^ behavior entityFieldSlots
@@ -12,6 +17,11 @@ SMDEntityReferenceType >> memberSlots [
 { #category : #accessing }
 SMDEntityReferenceType >> name [
 	^ behavior entityTypeName
+]
+
+{ #category : #serialization }
+SMDEntityReferenceType >> serializeValue: value [
+	^ value ifNotNil: [ value fullVersionId ]
 ]
 
 { #category : #accessing }

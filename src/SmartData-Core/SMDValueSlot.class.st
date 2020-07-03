@@ -9,12 +9,12 @@ Class {
 
 { #category : #initialization }
 SMDValueSlot >> createValueHolderFor: anObject [
-	^ SMDValueHolder for: anObject withSlot: self
+	^ type createValueHolderFor: anObject slot: self
 ]
 
 { #category : #serialization }
-SMDValueSlot >> deserializeValue: value in: valueHolder [
-	^ type deserializeValue: value in: valueHolder
+SMDValueSlot >> deserializeValue: value [
+	^ type deserializeValue: value
 ]
 
 { #category : #'code generation' }
@@ -47,8 +47,8 @@ SMDValueSlot >> printOn: aStream [
 ]
 
 { #category : #serialization }
-SMDValueSlot >> serializeValue: value in: valueHolder [
-	^ type serializeValue: value in: valueHolder
+SMDValueSlot >> serializeValue: value [
+	^ type serializeValue: value
 ]
 
 { #category : #accessing }

@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+SMDSetType >> collectionValueClass [
+	^ SMDListCollectionValue
+]
+
+{ #category : #'as yet unclassified' }
 SMDSetType >> kindSelectorPrefix [
 	^ #set
 ]

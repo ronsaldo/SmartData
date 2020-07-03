@@ -1,10 +1,10 @@
 Class {
-	#name : #SMDCompanyRole,
+	#name : #SMDCompanyStaffRole,
 	#superclass : #SMDRoleEntity,
 	#category : #'SmartData-Accounting-Entities'
 }
 
 { #category : #adding }
-SMDCompanyRole >> addToCompany: aCompany [
-	self subclassResponsibility
+SMDCompanyStaffRole >> addToCompany: aCompany [
+	aCompany staff add: self
 ]

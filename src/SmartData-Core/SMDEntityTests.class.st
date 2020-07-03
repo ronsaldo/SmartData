@@ -13,6 +13,40 @@ SMDEntityTests >> setUp [
 ]
 
 { #category : #tests }
+SMDEntityTests >> testAggregateEntitySerialization [
+	| originalId |
+	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
+		| mainProperty secondaryProperty aggregateEntity |
+
+		mainProperty := SMDTestEntityWithAttributes new.
+		mainProperty name: 'Alice'; value: 0.
+
+		secondaryProperty := SMDTestEntityWithAttributes new.
+		secondaryProperty name: 'Bob'; value: 0.
+		
+		aggregateEntity := SMDTestAggregateEntityWithAttributes new.
+		aggregateEntity
+			name: 'Security Group';
+			mainProperty: mainProperty.
+		aggregateEntity properties addAll: { mainProperty . secondaryProperty }.
+		originalId := aggregateEntity id.
+		
+		transaction commit.
+	].
+
+	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
+		| readedAggregate |
+		readedAggregate  := SMDTestAggregateEntityWithAttributes getWithID: originalId.
+		self assert: readedAggregate id equals: originalId.
+		self assert: readedAggregate name value equals: 'Security Group'.
+		self assert: readedAggregate mainProperty value name value equals: 'Alice'.
+		self assert: readedAggregate mainProperty value value value equals: 0.
+	].
+
+
+]
+
+{ #category : #tests }
 SMDEntityTests >> testEntityFieldSlotInitialization [
 	dataStore withRole: SMDSuperUserAdminRole doTransactionWith: [ :transaction |
 		| entity |

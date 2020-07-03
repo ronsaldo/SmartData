@@ -2,8 +2,8 @@ Class {
 	#name : #SMDCollectionType,
 	#superclass : #SMDAbstractType,
 	#instVars : [
-		'baseType',
-		'indexedSlotNames'
+		'indexedSlotNames',
+		'elementType'
 	],
 	#classVars : [
 		'CollectionTypeCache',
@@ -34,8 +34,39 @@ SMDCollectionType class >> initialize [
 
 { #category : #'as yet unclassified' }
 SMDCollectionType >> baseType: aBaseType indices: theIndexedSlotNames [
-	baseType := aBaseType.
+	elementType := aBaseType.
 	indexedSlotNames := theIndexedSlotNames.
+]
+
+{ #category : #'as yet unclassified' }
+SMDCollectionType >> collectionValueClass [
+	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+SMDCollectionType >> createInitialValueForValueHolder: valueHolder [
+	^ self collectionValueClass new
+		type: self;
+		smdOwnerHolder: valueHolder;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+SMDCollectionType >> createValueHolderFor: anObject slot: aSlot [
+	^ SMDCollectionValueHolder for: anObject withType: self
+]
+
+{ #category : #serialization }
+SMDCollectionType >> deserializeValue: value [
+	^ self collectionValueClass new
+		type: self;
+		deserializeContentFrom: value;
+		yourself
+]
+
+{ #category : #accessing }
+SMDCollectionType >> elementType [
+	^ elementType
 ]
 
 { #category : #'as yet unclassified' }
@@ -43,11 +74,26 @@ SMDCollectionType >> kindSelectorPrefix [
 	self subclassResponsibility
 ]
 
+{ #category : #accessing }
+SMDCollectionType >> name [
+	^ ByteString streamContents: [ :out |
+		out nextPutAll: elementType name; space; nextPutAll: self kindSelectorPrefix.
+		indexedSlotNames ifNotEmpty: [
+			out nextPutAll: 'WithIndices: '; print: indexedSlotNames asArray.
+		]
+	]
+]
+
 { #category : #printing }
 SMDCollectionType >> printOn: aStream [
-	baseType asValueForSlotPrinting printOn: aStream.
+	elementType asValueForSlotPrinting printOn: aStream.
 	aStream space; nextPutAll: self kindSelectorPrefix.
 	indexedSlotNames ifNotEmpty: [
 		aStream nextPutAll: 'WithIndices: '; print: indexedSlotNames asArray.
 	]
+]
+
+{ #category : #serialization }
+SMDCollectionType >> serializeValue: value [
+	^ value serializeValue
 ]

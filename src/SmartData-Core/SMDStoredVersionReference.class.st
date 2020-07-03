@@ -42,7 +42,7 @@ SMDStoredVersionReference >> retrieveIntoMemory [
 	memoryObject ifNil: [
 		context := SMDCurrentTransactionContext value.
 		context ifNil: [ self error: 'Cannot retrieve a previous version of a transaction when not in a transaction.' ].
-		memoryObject := SMDEntity getWithFullID: objectFullId versionID: id
+		memoryObject := SMDEntity getWithFullVersionID: self fullId
 	].
 	^ memoryObject
 

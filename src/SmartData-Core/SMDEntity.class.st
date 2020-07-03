@@ -99,6 +99,11 @@ SMDEntity class >> getWithFullID: aFullID versionID: aVersionID [
 ]
 
 { #category : #'as yet unclassified' }
+SMDEntity class >> getWithFullVersionID: fullVersionID [
+	^ self getWithFullID: fullVersionID first versionID: fullVersionID second
+]
+
+{ #category : #'as yet unclassified' }
 SMDEntity class >> getWithID: anID [
 	| context |
 	context := SMDCurrentTransactionContext value.
