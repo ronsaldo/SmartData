@@ -1,34 +1,34 @@
 Class {
-	#name : #SMDHeartBeatSensorSample,
+	#name : #SMDHeartRateSensorSample,
 	#superclass : #Object,
 	#instVars : [
 		'timestamp',
 		'beatsPerMinute'
 	],
-	#category : #'SmartData-HeartBeat'
+	#category : #'SmartData-HeartRate'
 }
 
 { #category : #accessing }
-SMDHeartBeatSensorSample >> beatsPerMinute [
+SMDHeartRateSensorSample >> beatsPerMinute [
 	^ beatsPerMinute
 ]
 
 { #category : #accessing }
-SMDHeartBeatSensorSample >> beatsPerMinute: anObject [
+SMDHeartRateSensorSample >> beatsPerMinute: anObject [
 	beatsPerMinute := anObject
 ]
 
 { #category : #printing }
-SMDHeartBeatSensorSample >> printOn: aStream [
+SMDHeartRateSensorSample >> printOn: aStream [
 	aStream print: timestamp; space; print: beatsPerMinute.
 ]
 
 { #category : #accessing }
-SMDHeartBeatSensorSample >> timestamp [
+SMDHeartRateSensorSample >> timestamp [
 	^ timestamp
 ]
 
 { #category : #accessing }
-SMDHeartBeatSensorSample >> timestamp: anObject [
+SMDHeartRateSensorSample >> timestamp: anObject [
 	timestamp := anObject
 ]

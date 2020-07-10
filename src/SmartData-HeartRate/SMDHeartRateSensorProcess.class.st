@@ -1,19 +1,32 @@
 Class {
-	#name : #SMDHeartBeatSensor,
+	#name : #SMDHeartRateSensorProcess,
 	#superclass : #Object,
 	#instVars : [
+		'dataStore',
+		'role',
 		'sensorProcess',
 		'sensorDataTransmissionProcess',
 		'availableDataForSending',
 		'availableDataForSendingConditing',
 		'availableDataForSendingMutex',
-		'random'
+		'random',
+		'sensorUI'
 	],
-	#category : #'SmartData-HeartBeat'
+	#category : #'SmartData-HeartRate'
 }
 
+{ #category : #accessing }
+SMDHeartRateSensorProcess >> dataStore [
+	^ dataStore
+]
+
+{ #category : #accessing }
+SMDHeartRateSensorProcess >> dataStore: anObject [
+	dataStore := anObject
+]
+
 { #category : #queue }
-SMDHeartBeatSensor >> dequeueBatchForSending [
+SMDHeartRateSensorProcess >> dequeueBatchForSending [
 	| result |
 	result := nil.
 	[
@@ -31,7 +44,7 @@ SMDHeartBeatSensor >> dequeueBatchForSending [
 ]
 
 { #category : #queue }
-SMDHeartBeatSensor >> isDataBatchSuitableForSending: dataBatch [
+SMDHeartRateSensorProcess >> isDataBatchSuitableForSending: dataBatch [
 	| firstTimestamp lastTimestamp deltaTime |
 	dataBatch size < 2 ifTrue: [ ^ false ].
 	firstTimestamp := dataBatch first timestamp.
@@ -40,31 +53,60 @@ SMDHeartBeatSensor >> isDataBatchSuitableForSending: dataBatch [
 	^ deltaTime >= 10 seconds "1 minute"
 ]
 
+{ #category : #'as yet unclassified' }
+SMDHeartRateSensorProcess >> openUI [
+	sensorUI := SMDHeartRateSensorUI new
+		sensor: self;
+		openWithSpec;
+		yourself
+]
+
 { #category : #'sensor polling process' }
-SMDHeartBeatSensor >> pushNewSample: aSample [
+SMDHeartRateSensorProcess >> pushNewSample: aSample [
 	availableDataForSendingMutex critical: [
 		availableDataForSending add: aSample.
 		availableDataForSendingConditing signal.
 	].
+	sensorUI ifNotNil: [ sensorUI lastSample: aSample ].
 
+]
+
+{ #category : #accessing }
+SMDHeartRateSensorProcess >> role [
+	^ role
+]
+
+{ #category : #accessing }
+SMDHeartRateSensorProcess >> role: anObject [
+	role := anObject
 ]
 
 { #category : #'sensor polling process' }
-SMDHeartBeatSensor >> sensorPollingIteration [
+SMDHeartRateSensorProcess >> sensorPollingIteration [
 	| now bpm timestamp |
 	random ifNil: [ random := Random seed: 42 ].
 	now := Time microsecondClockValue *1e-6.
-	bpm := 80 + (20 * (now * Float twoPi *(1/7.0)) cos) + ((random next * 2.0 - 1.0) * 15).
+	bpm := 80 + (20 * (now * Float twoPi *(1/14567.0)) sin) + ((random next * 2.0 - 1.0) * 5).
 	timestamp := DateAndTime now.
-	self pushNewSample: (SMDHeartBeatSensorSample new
+	self pushNewSample: (SMDHeartRateSensorSample new
 		timestamp: timestamp;
 		beatsPerMinute: bpm;
 		yourself).
-	(Delay forMilliseconds: (1000 + (3000 * random next)) floor ) wait
+	(Delay forMilliseconds: (300 + (200 * random next)) floor ) wait
+]
+
+{ #category : #accessing }
+SMDHeartRateSensorProcess >> sensorUI [
+	^ sensorUI
+]
+
+{ #category : #accessing }
+SMDHeartRateSensorProcess >> sensorUI: anObject [
+	sensorUI := anObject
 ]
 
 { #category : #'process actions' }
-SMDHeartBeatSensor >> start [
+SMDHeartRateSensorProcess >> start [
 	self stop.
 
 	availableDataForSending := OrderedCollection new.
@@ -76,19 +118,19 @@ SMDHeartBeatSensor >> start [
 ]
 
 { #category : #'data transmission process' }
-SMDHeartBeatSensor >> startSensorDataTransmissionProcess [
+SMDHeartRateSensorProcess >> startSensorDataTransmissionProcess [
 	^ [
 		[self submitDataBatch: self dequeueBatchForSending] repeat
 	] fork
 ]
 
 { #category : #'sensor polling process' }
-SMDHeartBeatSensor >> startSensorPollingLoop [
+SMDHeartRateSensorProcess >> startSensorPollingLoop [
 	^ [ [ self sensorPollingIteration ] repeat ] fork
 ]
 
 { #category : #'process actions' }
-SMDHeartBeatSensor >> stop [
+SMDHeartRateSensorProcess >> stop [
 	sensorProcess ifNotNil: [
 		sensorProcess terminate.
 		sensorProcess := nil.
@@ -100,6 +142,17 @@ SMDHeartBeatSensor >> stop [
 ]
 
 { #category : #'data transmission process' }
-SMDHeartBeatSensor >> submitDataBatch: batchToSend [
-	Transcript show: batchToSend; cr.
+SMDHeartRateSensorProcess >> submitDataBatch: batchToSend [
+	dataStore withRole: role doTransactionWith: [ :transaction |
+		| sensor patient |
+		sensor := role lastVersion.
+		patient := sensor patient value lastVersion.
+		
+		patient heartRateSamples addAll: (batchToSend collect: [ :each | SMDHeartRateSample new
+				timestamp: each timestamp;
+				beatsPerMinute: each beatsPerMinute;
+				yourself]).
+		transaction commit
+	].
+
 ]
