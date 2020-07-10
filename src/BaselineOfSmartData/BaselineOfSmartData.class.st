@@ -23,6 +23,10 @@ BaselineOfSmartData >> baseline: spec [
 				spec requires: #(#'SmartData-Core')
 			].
 		spec
+			package: #'SmartData-HeartBeat' with: [
+				spec requires: #(#'SmartData-MedicalRecord' #'SmartData-Roassal')
+			].
+		spec
 			package: #'SmartData-Roassal' with: [
 				spec requires: #(#'Roassal3')
 			].
