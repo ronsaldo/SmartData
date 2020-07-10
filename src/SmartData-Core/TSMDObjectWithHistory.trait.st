@@ -59,12 +59,7 @@ TSMDObjectWithHistory >> initializeObjectHistory [
 
 { #category : #accessing }
 TSMDObjectWithHistory >> lastVersion [
-	^ lastVersionReference ifNotNil: [ lastVersionReference retrieveIntoMemory ]
-]
-
-{ #category : #accessing }
-TSMDObjectWithHistory >> lastVersionReference [
-	^ lastVersionReference
+	^ self lastVersionReference ifNotNil: [ lastVersionReference retrieveIntoMemory ]
 ]
 
 { #category : #accessing }

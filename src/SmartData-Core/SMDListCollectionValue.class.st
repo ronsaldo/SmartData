@@ -14,6 +14,14 @@ SMDListCollectionValue >> add: anObject [
 
 ]
 
+{ #category : #enumerating }
+SMDListCollectionValue >> at: index [
+	| concreteValue |
+	concreteValue := self elementType concretizeValueForRead: (elements at: index).
+	elements at: index put: concreteValue.
+	^ concreteValue
+]
+
 { #category : #'as yet unclassified' }
 SMDListCollectionValue >> deserializeContentFrom: serializedValue [
 	| elementType |
@@ -34,7 +42,9 @@ SMDListCollectionValue >> deserializeValue: serializedValue [
 
 { #category : #enumerating }
 SMDListCollectionValue >> do: aBlock [
-	elements do: aBlock
+	1 to: elements size do: [:index |
+		aBlock value: (self at: index)
+	].
 ]
 
 { #category : #initialization }
@@ -54,4 +64,9 @@ SMDListCollectionValue >> serializeValue [
 	| elementType |
 	elementType := self elementType.
 	^ (elements collect: [ :each | elementType serializeValue: each ]) asArray
+]
+
+{ #category : #enumerating }
+SMDListCollectionValue >> size [
+	^ elements size
 ]

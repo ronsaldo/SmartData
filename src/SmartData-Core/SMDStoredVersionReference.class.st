@@ -15,14 +15,31 @@ SMDStoredVersionReference class >> deserializeFor: objectWithHistory from: store
 	^ self new deserializeFor: objectWithHistory from: storedReference
 ]
 
+{ #category : #'instance creation' }
+SMDStoredVersionReference class >> fromFullVersionID: value [
+	^ self new fromFullVersionID: value
+]
+
 { #category : #'as yet unclassified' }
 SMDStoredVersionReference >> deserializeFor: objectWithHistory from: storedReference [
 	id := storedReference.
 	objectFullId := objectWithHistory fullId.
 ]
 
+{ #category : #'as yet unclassified' }
+SMDStoredVersionReference >> entityFullID: theEntityFullID versionID: theVersionID [
+	objectFullId := theEntityFullID.
+	id := theVersionID.
+]
+
+{ #category : #'as yet unclassified' }
+SMDStoredVersionReference >> fromFullVersionID: theFullID [
+	objectFullId := theFullID first.
+	id := theFullID second.
+]
+
 { #category : #accessing }
-SMDStoredVersionReference >> fullId [
+SMDStoredVersionReference >> fullVersionId [
 	^ { objectFullId . id }
 ]
 
@@ -42,7 +59,7 @@ SMDStoredVersionReference >> retrieveIntoMemory [
 	memoryObject ifNil: [
 		context := SMDCurrentTransactionContext value.
 		context ifNil: [ self error: 'Cannot retrieve a previous version of a transaction when not in a transaction.' ].
-		memoryObject := SMDEntity getWithFullVersionID: self fullId
+		memoryObject := SMDEntity getWithFullVersionID: self fullVersionId
 	].
 	^ memoryObject
 

@@ -4,9 +4,16 @@ Class {
 	#category : #'SmartData-Core-Model'
 }
 
+{ #category : #'as yet unclassified' }
+SMDEntityReferenceType >> concretizeValueForRead: value [
+	value isSMDEntity ifTrue: [ ^ value ].
+	self assert: value isSMDAbstractObjectReference.
+	^ value retrieveIntoMemory
+]
+
 { #category : #serialization }
 SMDEntityReferenceType >> deserializeValue: value [
-	^ SMDEntity getWithFullVersionID: value
+	^ SMDStoredVersionReference fromFullVersionID: value
 ]
 
 { #category : #'as yet unclassified' }

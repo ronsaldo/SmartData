@@ -13,13 +13,23 @@ SMDAbstractType >> asValueForSlotPrinting [
 ]
 
 { #category : #'as yet unclassified' }
+SMDAbstractType >> concretizeValueForRead: value [
+	^ value
+]
+
+{ #category : #'as yet unclassified' }
 SMDAbstractType >> createInitialValueForValueHolder: valueHolder [
 	^ nil
 ]
 
 { #category : #'as yet unclassified' }
 SMDAbstractType >> createValueHolderFor: anObject slot: aSlot [
-	^ SMDValueHolder for: anObject withType: self
+	^ SMDAtomicValueHolder for: anObject withType: self
+]
+
+{ #category : #'as yet unclassified' }
+SMDAbstractType >> createValueHolderForEntity: anObject slot: aSlot [
+	^ SMDHistoricValueHolder for: anObject withType: self
 ]
 
 { #category : #serialization }

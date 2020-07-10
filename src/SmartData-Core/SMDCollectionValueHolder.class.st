@@ -1,6 +1,6 @@
 Class {
 	#name : #SMDCollectionValueHolder,
-	#superclass : #SMDValueHolder,
+	#superclass : #SMDHistoricValueHolder,
 	#category : #'SmartData-Core-Model'
 }
 
@@ -19,6 +19,21 @@ SMDCollectionValueHolder >> all [
 	^ self value
 ]
 
+{ #category : #accessing }
+SMDCollectionValueHolder >> first [
+	^ self value first
+]
+
+{ #category : #accessing }
+SMDCollectionValueHolder >> ifEmpty: aBlock [
+	^ self value ifEmpty: aBlock
+]
+
+{ #category : #accessing }
+SMDCollectionValueHolder >> ifNotEmpty: aBlock [
+	^ self value ifNotEmpty: aBlock
+]
+
 { #category : #adding }
 SMDCollectionValueHolder >> includes: anElement [
 	^ self value includes: anElement
@@ -34,9 +49,19 @@ SMDCollectionValueHolder >> isNotEmpty [
 	^ self value isEmpty
 ]
 
+{ #category : #accessing }
+SMDCollectionValueHolder >> last [
+	^ self value last
+]
+
 { #category : #adding }
 SMDCollectionValueHolder >> remove: anElement [
 	^ self value remove: anElement
+]
+
+{ #category : #accessing }
+SMDCollectionValueHolder >> second [
+	^ self value second
 ]
 
 { #category : #accessing }

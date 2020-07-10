@@ -10,6 +10,16 @@ SMDAbstractVersionReference >> isCurrentVersionReference [
 ]
 
 { #category : #testing }
+SMDAbstractVersionReference >> isLastVersionReference [
+	^ false
+]
+
+{ #category : #testing }
+SMDAbstractVersionReference >> isSMDAbstractObjectReference [
+	^ true
+]
+
+{ #category : #testing }
 SMDAbstractVersionReference >> isStoredVersionReference [
 	^ false
 ]
@@ -17,4 +27,9 @@ SMDAbstractVersionReference >> isStoredVersionReference [
 { #category : #'as yet unclassified' }
 SMDAbstractVersionReference >> retrieveIntoMemory [
 	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+SMDAbstractVersionReference >> serialized [
+	self subclassResponsibility
 ]

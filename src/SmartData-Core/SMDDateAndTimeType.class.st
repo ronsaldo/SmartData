@@ -11,7 +11,7 @@ SMDDateAndTimeType >> convertFromSerialized: value [
 
 { #category : #serialization }
 SMDDateAndTimeType >> convertToSerialize: value [
-	^ value asStringYMDHM
+	^ value asString
 ]
 
 { #category : #accessing }

@@ -52,7 +52,7 @@ SMDCollectionType >> createInitialValueForValueHolder: valueHolder [
 ]
 
 { #category : #'as yet unclassified' }
-SMDCollectionType >> createValueHolderFor: anObject slot: aSlot [
+SMDCollectionType >> createValueHolderForEntity: anObject slot: aSlot [
 	^ SMDCollectionValueHolder for: anObject withType: self
 ]
 

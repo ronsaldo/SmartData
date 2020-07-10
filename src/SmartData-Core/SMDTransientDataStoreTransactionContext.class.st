@@ -31,8 +31,8 @@ SMDTransientDataStoreTransactionContext >> createEntity: entityClass withId: anI
 
 { #category : #hooks }
 SMDTransientDataStoreTransactionContext >> finishTransactionRollingBackChanges [
-	"TODO: reset all of the changed objects"
-	Transcript show: 'Finish rolling back transient transaction'; cr
+	"By default, nothing is required here"
+
 ]
 
 { #category : #hooks }
@@ -71,12 +71,30 @@ SMDTransientDataStoreTransactionContext >> getEntity: entityClass withID: anID v
 	]
 ]
 
+{ #category : #'as yet unclassified' }
+SMDTransientDataStoreTransactionContext >> getEntityLastStoredVersionReference: entity [
+	| fullId lastVersionId |
+	fullId := entity fullId.
+	lastVersionId := dataStore getEntityLastVersionForID: fullId.
+	lastVersionId ifNil: [
+		self error: 'Failed to find a required entity in the database.'
+	].
+	^ SMDStoredVersionReference new
+		entityFullID: fullId versionID: lastVersionId;
+		yourself
+]
+
 { #category : #initialization }
 SMDTransientDataStoreTransactionContext >> initialize [
 	super initialize.
 	loadedEntitiesDictionary := Dictionary new.
 	objectModificationLog := OrderedCollection new.
 	objectModificationSet := IdentitySet new.
+]
+
+{ #category : #'as yet unclassified' }
+SMDTransientDataStoreTransactionContext >> recordEntity: entity materializationWithType: entityTypeName id: id versionID: versionId [
+	loadedEntitiesDictionary at: { entityTypeName . id . versionId } ifAbsentPut: [ entity ]
 ]
 
 { #category : #accessing }

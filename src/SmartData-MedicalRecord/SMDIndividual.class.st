@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'#names => SMDStringType',
 		'#surnames => SMDStringType',
-		'#birthDate => SMDStringType',
+		'#birthDate => SMDDateType',
 		'#address => SMDStringType'
 	],
 	#category : #'SmartData-MedicalRecord-Entities'

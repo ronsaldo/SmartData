@@ -134,6 +134,10 @@ SMDEntity class >> materializeEntityVersionId: versionId with: serializedEntity 
 	entityClass := self entityClassFromTypeName: type.
 	
 	entity := entityClass basicNew initializeWithId: id.
+	SMDCurrentTransactionContext value ifNotNil: [ :context |
+		context recordEntity: entity materializationWithType: type id: id versionID: versionId.
+	].
+
 	entity currentVersionReferenceId: versionId. 
 	entity deserializeExtraMetaDataFrom: serializedEntityDictionary.
 	entity deserializeEntityFieldsFrom: (Dictionary newFromPairs: (serializedEntityDictionary at: #fields)).
@@ -213,6 +217,20 @@ SMDEntity >> initialize [
 SMDEntity >> initializeWithId: theId [
 	id := theId.
 	self initialize.
+]
+
+{ #category : #testing }
+SMDEntity >> isSMDEntity [
+	^ true
+]
+
+{ #category : #converting }
+SMDEntity >> lastVersionReference [
+	SMDCurrentTransactionContext value ifNotNil: [:transactionContext |
+		lastVersionReference := transactionContext validateLastVersionReference: lastVersionReference forEntity: self.
+	].
+
+	^ lastVersionReference
 ]
 
 { #category : #'as yet unclassified' }

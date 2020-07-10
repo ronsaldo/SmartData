@@ -9,6 +9,7 @@ Class {
 
 { #category : #initialization }
 SMDValueSlot >> createValueHolderFor: anObject [
+	anObject isSMDEntity ifTrue: [ ^ type createValueHolderForEntity: anObject slot: self ].
 	^ type createValueHolderFor: anObject slot: self
 ]
 

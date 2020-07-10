@@ -86,6 +86,11 @@ SMDAbstractTransactionContext >> getEntity: entityClass withID: anID versionID: 
 ]
 
 { #category : #'as yet unclassified' }
+SMDAbstractTransactionContext >> getEntityLastStoredVersionReference: entity [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
 SMDAbstractTransactionContext >> getOrCreateEntity: entityClass withID: anID [
 	self subclassResponsibility
 ]
@@ -123,6 +128,23 @@ SMDAbstractTransactionContext >> performWithBlock: aBlock [
 ]
 
 { #category : #'as yet unclassified' }
+SMDAbstractTransactionContext >> recordEntity: entity materializationWithType: type id: id versionID: versionId [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
 SMDAbstractTransactionContext >> transactionVersionID [
 	^ self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+SMDAbstractTransactionContext >> validateLastVersionReference: existentLastVersionReference forEntity: entity [
+	(existentLastVersionReference isNotNil and: [
+	existentLastVersionReference isLastVersionReference and: [
+	existentLastVersionReference transactionContext == self ] ]) ifTrue: [ ^ existentLastVersionReference ].
+	
+	^ SMDLastVersionReference new
+		storedVersionReference: (self getEntityLastStoredVersionReference: entity );
+		transactionContext: self;
+		yourself
 ]
