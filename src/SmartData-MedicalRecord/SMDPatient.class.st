@@ -2,7 +2,7 @@ Class {
 	#name : #SMDPatient,
 	#superclass : #SMDIndividual,
 	#instVars : [
-		'#medics => SMDPatient set',
+		'#medics => SMDMedic set',
 		'#heartRateSamples => SMDHeartRateSample set'
 	],
 	#category : #'SmartData-MedicalRecord-Entities'
