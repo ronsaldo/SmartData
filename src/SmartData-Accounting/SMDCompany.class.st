@@ -3,9 +3,9 @@ Class {
 	#superclass : #SMDEntity,
 	#instVars : [
 		'#staff => SMDCompanyStaffRole set',
-		'#owners => SMDCompanyStaffRole set',
-		'#accountants => SMDCompanyStaffRole set',
-		'#sellers => SMDCompanyStaffRole set',
+		'#owners => SMDCompanyOwner set',
+		'#accountants => SMDCompanyAccountant set',
+		'#sellers => SMDCompanySeller set',
 		'#movements => SMDAccountingMovement set'
 	],
 	#category : #'SmartData-Accounting-Entities'
