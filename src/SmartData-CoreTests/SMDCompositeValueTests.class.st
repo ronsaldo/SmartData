@@ -1,7 +1,7 @@
 Class {
 	#name : #SMDCompositeValueTests,
 	#superclass : #TestCase,
-	#category : #'SmartData-Core-Tests'
+	#category : #'SmartData-CoreTests'
 }
 
 { #category : #tests }

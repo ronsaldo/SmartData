@@ -5,7 +5,7 @@ Class {
 		'#name => SMDStringType',
 		'#value => SMDIntegerType'
 	],
-	#category : #'SmartData-Core-Tests'
+	#category : #'SmartData-CoreTests'
 }
 
 { #category : #initialization }

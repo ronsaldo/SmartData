@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'dataStore'
 	],
-	#category : #'SmartData-Core-Tests'
+	#category : #'SmartData-CoreTests'
 }
 
 { #category : #running }

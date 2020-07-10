@@ -6,7 +6,7 @@ Class {
 		'#mainProperty => SMDTestEntityWithAttributes',
 		'#properties => SMDTestEntityWithAttributes list'
 	],
-	#category : #'SmartData-Core-Tests'
+	#category : #'SmartData-CoreTests'
 }
 
 { #category : #initialization }

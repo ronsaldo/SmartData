@@ -15,6 +15,10 @@ BaselineOfSmartData >> baseline: spec [
 		spec
 			package: #'SmartData-Core'.
 		spec
+			package: #'SmartData-CoreTests' with: [
+				spec requires: #(#'SmartData-Core')
+			].
+		spec
 			package: #'SmartData-Accounting' with: [
 				spec requires: #(#'SmartData-Core')
 			].

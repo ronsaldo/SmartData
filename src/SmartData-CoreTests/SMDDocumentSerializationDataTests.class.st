@@ -1,7 +1,7 @@
 Class {
 	#name : #SMDDocumentSerializationDataTests,
 	#superclass : #TestCase,
-	#category : #'SmartData-Core-Tests'
+	#category : #'SmartData-CoreTests'
 }
 
 { #category : #'as yet unclassified' }
